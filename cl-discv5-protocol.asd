@@ -7,7 +7,7 @@
 (defsystem #:cl-discv5-protocol
   :name "cl-discv5-protocol"
   :version "1.0.0"
-  :author "CLPIC Project"
+  :author "Parkian Company LLC"
   :license "MIT"
   :description "Ethereum Discovery v5 UDP Protocol - Standalone Implementation"
   :long-description "Pure Common Lisp implementation of the Ethereum Discovery v5 protocol
