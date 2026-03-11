@@ -93,6 +93,7 @@ References:
    #:node-id
    #:node-id-p
    #:make-node-id
+   #:make-node-id-from-bytes   ; For creating node IDs from byte arrays
    #:node-id-bytes
    #:node-id-hex
 
@@ -198,6 +199,10 @@ References:
    #:discv5-node
    #:discv5-node-p
    #:make-discv5-node
+   #:discv5-node-id              ; Accessor for node's ID
+   #:discv5-node-enr             ; Accessor for node's ENR
+   #:discv5-node-address         ; Accessor for node's address
+   #:discv5-node-udp-port        ; Accessor for UDP port
    #:node-enr
    #:node-address
    #:node-last-seen
@@ -283,10 +288,12 @@ References:
    #:routing-table
    #:routing-table-p
    #:make-routing-table
+   #:make-routing-table-for-node  ; Convenience constructor
    #:routing-table-local-id
    #:routing-table-local-enr
    #:routing-table-buckets
    #:routing-table-size
+   #:routing-table-node-count     ; Alias for routing-table-size
 
    ;; K-bucket
    #:k-bucket
@@ -498,6 +505,10 @@ References:
    #:session
    #:session-p
    #:make-session
+   #:discv5-session            ; Actual struct name in implementation
+   #:discv5-session-p
+   #:make-discv5-session
+   #:discv5-session-node-id
    #:session-node-id
    #:session-address
    #:session-initiator-key
@@ -511,6 +522,7 @@ References:
    #:session-cache
    #:session-cache-p
    #:make-session-cache
+   #:make-session-cache-default  ; Convenience constructor
    #:session-cache-get
    #:session-cache-put
    #:session-cache-remove
@@ -650,6 +662,15 @@ References:
    #:make-topic-hash
    #:topic-to-hash
 
+   ;; Topic table (actual implementation)
+   #:topic-table
+   #:topic-table-p
+   #:make-topic-table
+   #:make-topic-table-default   ; Convenience constructor
+   #:topic-table-register
+   #:topic-table-lookup
+   #:topic-table-remove
+
    ;; Topic index (ad table)
    #:topic-index
    #:topic-index-p
@@ -775,6 +796,10 @@ References:
    #:enr-from-text
    #:format-node-id
    #:format-enr
+
+   ;; RLP encoding/decoding
+   #:rlp-encode
+   #:rlp-decode
 
    ;; Debugging
    #:dump-routing-table

@@ -1,31 +1,8 @@
 ;;;; test-discv5.lisp - Tests for Discovery v5 protocol
 ;;;; Part of cl-discv5-protocol
 
-(defpackage #:discv5.test
-  (:use #:cl)
-  (:import-from #:cl-discv5-protocol
-                #:make-node-id-from-bytes
-                #:node-id-p
-                #:node-id-bytes
-                #:node-id=
-                #:node-distance
-                #:log-distance
-                #:make-routing-table-for-node
-                #:routing-table-p
-                #:routing-table-node-count
-                #:routing-table-add
-                #:make-discv5-node
-                #:rlp-encode
-                #:rlp-decode
-                #:make-session-cache-default
-                #:make-discv5-session
-                #:session-cache-put
-                #:session-cache-get
-                #:session-cache-remove
-                #:make-topic-table-default
-                #:topic-table-register
-                #:topic-table-lookup)
-  (:export #:run-tests))
+;;; Package discv5.test is defined in package.lisp with (:use #:cl #:discv5)
+;;; so all discv5 exports are available without qualification.
 
 (in-package #:discv5.test)
 
