@@ -436,7 +436,7 @@
 ;;; AES-GCM (STUB - requires real implementation)
 ;;; ============================================================================
 
-(defun aes-gcm-encrypt (key nonce plaintext &optional (aad #()))
+(defun aes-gcm-encrypt (key nonce plaintext &optional (aad (make-array 0 :element-type '(unsigned-byte 8))))
   "Encrypt PLAINTEXT with AES-GCM. Returns (ciphertext . tag)."
   (declare (type (simple-array (unsigned-byte 8) (16)) key)
            (type (simple-array (unsigned-byte 8) (12)) nonce)
@@ -458,7 +458,7 @@
                 (aref key i))))
     (cons ciphertext tag)))
 
-(defun aes-gcm-decrypt (key nonce ciphertext tag &optional (aad #()))
+(defun aes-gcm-decrypt (key nonce ciphertext tag &optional (aad (make-array 0 :element-type '(unsigned-byte 8))))
   "Decrypt CIPHERTEXT with AES-GCM. Returns plaintext or NIL if auth fails."
   (declare (type (simple-array (unsigned-byte 8) (16)) key)
            (type (simple-array (unsigned-byte 8) (12)) nonce)
