@@ -1,3 +1,6 @@
+;;;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
+;;;; SPDX-License-Identifier: BSD-3-Clause
+
 ;;;; handshake.lisp - WHOAREYOU challenge-response handshake
 ;;;; Part of cl-discv5-protocol
 

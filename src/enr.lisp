@@ -1,3 +1,6 @@
+;;;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
+;;;; SPDX-License-Identifier: BSD-3-Clause
+
 ;;;; enr.lisp - Ethereum Node Records (EIP-778)
 ;;;; Part of cl-discv5-protocol
 

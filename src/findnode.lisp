@@ -1,3 +1,6 @@
+;;;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
+;;;; SPDX-License-Identifier: BSD-3-Clause
+
 ;;;; findnode.lisp - FINDNODE/NODES handling
 ;;;; Part of cl-discv5-protocol
 
