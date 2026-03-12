@@ -54,4 +54,6 @@ for secure, encrypted peer discovery in P2P networks. Features include:
     :components
     ((:file "test-discv5"))))
   :perform (test-op (o c)
-             (uiop:symbol-call :discv5.test :run-tests)))
+             (let ((result (uiop:symbol-call :discv5.test :run-tests)))
+               (unless result
+                 (error "Tests failed")))))
