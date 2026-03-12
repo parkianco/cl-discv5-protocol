@@ -94,6 +94,9 @@
 
 (defun session-decrypt (session ciphertext their-nonce aad)
   "Decrypt a message using session keys."
-  (let ((key (discv5-session-recipient-key session)))
+  (let* ((key (discv5-session-recipient-key session))
+         (ct-len (- (length ciphertext) 16))
+         (ct (subseq ciphertext 0 ct-len))
+         (tag (subseq ciphertext ct-len)))
     (setf (discv5-session-last-used session) (get-universal-time))
-    (discv5.crypto:aes-gcm-decrypt key their-nonce ciphertext aad)))
+    (discv5.crypto:aes-gcm-decrypt key their-nonce ct tag aad)))

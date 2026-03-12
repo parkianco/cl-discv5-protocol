@@ -123,7 +123,7 @@
                             0)))
          (encrypted (subseq rest header-len))
          (message (when (and session-key (> (length encrypted) 0))
-                    (let ((decrypted (aes-gcm-decrypt
+                    (let ((decrypted (discv5.crypto:aes-gcm-decrypt
                                       session-key
                                       (packet-header-nonce header)
                                       encrypted
