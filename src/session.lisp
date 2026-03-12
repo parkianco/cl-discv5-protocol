@@ -66,8 +66,8 @@
                               #x65 #x65 #x6d #x65 #x6e #x74)      ; \"eement\"
                             (node-id-bytes initiator-id)
                             (node-id-bytes recipient-id)))
-         (prk (hkdf-extract challenge secret))
-         (okm (hkdf-expand prk info 32)))
+         (prk (discv5.crypto:hkdf-extract challenge secret))
+         (okm (discv5.crypto:hkdf-expand prk info 32)))
     (values (subseq okm 0 16)    ; initiator-key
             (subseq okm 16 32)))) ; recipient-key
 
@@ -90,10 +90,10 @@
   "Encrypt a message using session keys."
   (let ((key (discv5-session-initiator-key session)))
     (setf (discv5-session-last-used session) (get-universal-time))
-    (aes-gcm-encrypt key our-nonce message nil)))
+    (discv5.crypto:aes-gcm-encrypt key our-nonce message nil)))
 
 (defun session-decrypt (session ciphertext their-nonce aad)
   "Decrypt a message using session keys."
   (let ((key (discv5-session-recipient-key session)))
     (setf (discv5-session-last-used session) (get-universal-time))
-    (aes-gcm-decrypt key their-nonce ciphertext aad)))
+    (discv5.crypto:aes-gcm-decrypt key their-nonce ciphertext aad)))
