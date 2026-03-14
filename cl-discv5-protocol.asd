@@ -1,12 +1,15 @@
+;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
+;; SPDX-License-Identifier: BSD-3-Clause
+
 ;;;; -*- Mode: Lisp; Syntax: Common-Lisp -*-
 ;;;; cl-discv5-protocol.asd - Ethereum Discovery v5 Protocol
 ;;;;
 ;;;; Standalone Common Lisp implementation of the Ethereum Discovery v5 protocol.
 ;;;; Zero external dependencies - pure Common Lisp with SBCL extensions.
 
-(defsystem #:cl-discv5-protocol
+(asdf:defsystem #:cl-discv5-protocol
   :name "cl-discv5-protocol"
-  :version "1.0.0"
+  :version "0.1.0"
   :author "Parkian Company LLC"
   :license "MIT"
   :description "Ethereum Discovery v5 UDP Protocol - Standalone Implementation"
@@ -45,15 +48,15 @@ for secure, encrypted peer discovery in P2P networks. Features include:
     :components
     ((:file "test-discv5"))))
 
-  :in-order-to ((test-op (test-op #:cl-discv5-protocol/test))))
+  :in-order-to ((asdf:test-op (test-op #:cl-discv5-protocol/test))))
 
-(defsystem #:cl-discv5-protocol/test
+(asdf:defsystem #:cl-discv5-protocol/test
   :depends-on (#:cl-discv5-protocol)
   :components
   ((:module "test"
     :components
     ((:file "test-discv5"))))
-  :perform (test-op (o c)
+  :perform (asdf:test-op (o c)
              (let ((result (uiop:symbol-call :discv5.test :run-tests)))
                (unless result
                  (error "Tests failed")))))
