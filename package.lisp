@@ -803,6 +803,7 @@ References:
    ;; RLP encoding/decoding
    #:rlp-encode
    #:rlp-decode
+   #:rlp-decode-integer
 
    ;; Debugging
    #:dump-routing-table

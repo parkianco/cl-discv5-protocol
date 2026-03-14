@@ -28,7 +28,7 @@
 
 (defun compute-topic-hash (name)
   "Compute the hash of a topic name."
-  (keccak-256 (map 'vector #'char-code name)))
+  (discv5.crypto:keccak-256 (map 'vector #'char-code name)))
 
 (defun topic-table-register (table topic-name node)
   "Register a node as advertising a topic."

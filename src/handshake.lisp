@@ -26,7 +26,7 @@
                                (node-id-bytes dest-id)
                                ;; "WHOAREYOU" in bytes
                                #(#x57 #x48 #x4f #x41 #x52 #x45 #x59 #x4f #x55))))
-    (subseq (keccak-256 preimage) 0 32)))
+    (subseq (discv5.crypto:keccak-256 preimage) 0 32)))
 
 (defun make-whoareyou-challenge (dest-id enr-seq)
   "Create a new WHOAREYOU challenge."
@@ -54,7 +54,7 @@
      :magic (subseq bytes 0 32)
      :token (subseq bytes 32 64)
      :id-nonce (subseq bytes 64 80)
-     :enr-seq (rlp-decode (subseq bytes 80)))))
+     :enr-seq (rlp-decode-integer (rlp-decode (subseq bytes 80))))))
 
 ;;; Handshake response (auth message)
 
@@ -74,7 +74,7 @@
                                  #x69 #x74 #x79 #x20 #x70 #x72 #x6f #x6f #x66)
                                challenge-data
                                id-nonce))
-         (hash (keccak-256 message)))
+         (hash (discv5.crypto:keccak-256 message)))
     (secp256k1-sign privkey hash)))
 
 (defun verify-id-nonce-sig (pubkey sig id-nonce challenge-data)
@@ -85,7 +85,7 @@
                                  #x69 #x74 #x79 #x20 #x70 #x72 #x6f #x6f #x66)
                                challenge-data
                                id-nonce))
-         (hash (keccak-256 message)))
+         (hash (discv5.crypto:keccak-256 message)))
     (secp256k1-verify pubkey hash sig)))
 
 (defun create-handshake-response (privkey whoareyou our-enr include-enr-p)
@@ -115,7 +115,7 @@
   "Decode handshake auth data."
   (let ((decoded (rlp-decode bytes)))
     (make-handshake-auth
-     :version (first decoded)
+     :version (rlp-decode-integer (first decoded))
      :id-nonce-sig (second decoded)
      :ephemeral-pubkey (third decoded)
      :enr (when (fourth decoded)

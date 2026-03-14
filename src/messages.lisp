@@ -80,26 +80,27 @@
          (content (rlp-decode (subseq bytes 1))))
     (ecase msg-type
       (#.+msg-ping+
-       (make-ping-message :request-id (first content)
-                          :enr-seq (second content)))
+       (make-ping-message :request-id (rlp-decode-integer (first content))
+                          :enr-seq (rlp-decode-integer (second content))))
       (#.+msg-pong+
-       (make-pong-message :request-id (first content)
-                          :enr-seq (second content)
+       (make-pong-message :request-id (rlp-decode-integer (first content))
+                          :enr-seq (rlp-decode-integer (second content))
                           :recipient-ip (third content)
-                          :recipient-port (fourth content)))
+                          :recipient-port (rlp-decode-integer (fourth content))))
       (#.+msg-findnode+
-       (make-findnode-message :request-id (first content)
-                              :distances (second content)))
+       (make-findnode-message
+        :request-id (rlp-decode-integer (first content))
+        :distances (mapcar #'rlp-decode-integer (second content))))
       (#.+msg-nodes+
-       (make-nodes-message :request-id (first content)
-                           :total (second content)
+       (make-nodes-message :request-id (rlp-decode-integer (first content))
+                           :total (rlp-decode-integer (second content))
                            :enrs (mapcar #'enr-decode (third content))))
       (#.+msg-talkreq+
-       (make-talkreq-message :request-id (first content)
+       (make-talkreq-message :request-id (rlp-decode-integer (first content))
                              :protocol (second content)
                              :request (third content)))
       (#.+msg-talkresp+
-       (make-talkresp-message :request-id (first content)
+       (make-talkresp-message :request-id (rlp-decode-integer (first content))
                               :response (second content))))))
 
 (defun next-request-id ()

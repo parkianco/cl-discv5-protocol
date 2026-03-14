@@ -13,19 +13,32 @@
 ;;; RLP Encoding
 ;;; ============================================================================
 
+(defun octet-sequence-p (item)
+  "Return true when ITEM is a vector whose elements are octets."
+  (and (vectorp item)
+       (every (lambda (value) (typep value '(unsigned-byte 8))) item)))
+
+(defun ensure-octet-vector (item)
+  "Coerce ITEM to a simple octet vector."
+  (let ((result (make-octet-vector (length item))))
+    (replace result item)
+    result))
+
 (defun rlp-encode (item)
-  "Encode ITEM using RLP. ITEM can be bytes or a list of items."
-  (etypecase item
-    ((simple-array (unsigned-byte 8) (*))
-     (rlp-encode-bytes item))
-    (string
+  "Encode ITEM using RLP. ITEM can be bytes, a string, an integer, or a list."
+  (cond
+    ((octet-sequence-p item)
+     (rlp-encode-bytes (ensure-octet-vector item)))
+    ((stringp item)
      (rlp-encode-bytes (map '(vector (unsigned-byte 8)) #'char-code item)))
-    (integer
+    ((integerp item)
      (rlp-encode-integer item))
-    (list
+    ((listp item)
      (rlp-encode-list item))
-    (null
-     (rlp-encode-bytes (make-octet-vector 0)))))
+    ((null item)
+     (rlp-encode-bytes (make-octet-vector 0)))
+    (t
+     (error "Unsupported RLP item: ~S" item))))
 
 (defun rlp-encode-bytes (bytes)
   "RLP encode a byte array."
@@ -105,8 +118,8 @@
 ;;; RLP Decoding
 ;;; ============================================================================
 
-(defun rlp-decode (data &optional (offset 0))
-  "Decode RLP data starting at OFFSET. Returns (value . next-offset)."
+(defun rlp-decode-with-offset (data &optional (offset 0))
+  "Decode RLP DATA starting at OFFSET and return VALUE and NEXT-OFFSET."
   (declare (type (simple-array (unsigned-byte 8) (*)) data)
            (type fixnum offset))
   (when (>= offset (length data))
@@ -117,7 +130,7 @@
       ((<= prefix #x7f)
        (let ((result (make-octet-vector 1)))
          (setf (aref result 0) prefix)
-         (cons result (1+ offset))))
+         (values result (1+ offset))))
       ;; Short string [0x80, 0xb7]: length = prefix - 0x80
       ((<= prefix #xb7)
        (let* ((len (- prefix #x80))
@@ -125,7 +138,7 @@
               (end (+ start len)))
          (when (> end (length data))
            (error 'validation-error :message "RLP: string length exceeds data"))
-         (cons (subseq-octets data start end) end)))
+         (values (subseq-octets data start end) end)))
       ;; Long string [0xb8, 0xbf]: prefix - 0xb7 bytes for length
       ((<= prefix #xbf)
        (let* ((len-len (- prefix #xb7))
@@ -134,7 +147,7 @@
               (end (+ start len)))
          (when (> end (length data))
            (error 'validation-error :message "RLP: string length exceeds data"))
-         (cons (subseq-octets data start end) end)))
+         (values (subseq-octets data start end) end)))
       ;; Short list [0xc0, 0xf7]: length = prefix - 0xc0
       ((<= prefix #xf7)
        (let* ((len (- prefix #xc0))
@@ -142,7 +155,7 @@
               (end (+ start len)))
          (when (> end (length data))
            (error 'validation-error :message "RLP: list length exceeds data"))
-         (cons (rlp-decode-list data start end) end)))
+         (values (rlp-decode-list data start end) end)))
       ;; Long list [0xf8, 0xff]: prefix - 0xf7 bytes for length
       (t
        (let* ((len-len (- prefix #xf7))
@@ -151,7 +164,11 @@
               (end (+ start len)))
          (when (> end (length data))
            (error 'validation-error :message "RLP: list length exceeds data"))
-         (cons (rlp-decode-list data start end) end))))))
+         (values (rlp-decode-list data start end) end))))))
+
+(defun rlp-decode (data &optional (offset 0))
+  "Decode RLP DATA starting at OFFSET and return the decoded value."
+  (nth-value 0 (rlp-decode-with-offset data offset)))
 
 (defun rlp-decode-length (data offset len-len)
   "Decode big-endian length from DATA at OFFSET with LEN-LEN bytes."
@@ -167,10 +184,13 @@
   (declare (type (simple-array (unsigned-byte 8) (*)) data)
            (type fixnum start end))
   (loop with offset = start
+        with items = nil
         while (< offset end)
-        for (item . next-offset) = (rlp-decode data offset)
-        collect item
-        do (setf offset next-offset)))
+        do (multiple-value-bind (item next-offset)
+               (rlp-decode-with-offset data offset)
+             (push item items)
+             (setf offset next-offset))
+        finally (return (nreverse items))))
 
 (defun rlp-decode-integer (bytes)
   "Decode bytes as big-endian unsigned integer."

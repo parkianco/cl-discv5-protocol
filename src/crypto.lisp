@@ -185,9 +185,14 @@
 
 (defun keccak-256 (data)
   "Compute Keccak-256 hash of DATA bytes."
-  (declare (type (simple-array (unsigned-byte 8) (*)) data))
-  (let ((ctx (make-keccak-256-state)))
-    (keccak-256-update ctx data)
+  (let* ((octets (if (typep data '(simple-array (unsigned-byte 8) (*)))
+                     data
+                     (let ((result (make-array (length data)
+                                               :element-type '(unsigned-byte 8))))
+                       (replace result data)
+                       result)))
+         (ctx (make-keccak-256-state)))
+    (keccak-256-update ctx octets)
     (keccak-256-finalize ctx)))
 
 ;;; ============================================================================

@@ -21,7 +21,7 @@
 
 (defun node-id-from-pubkey (pubkey)
   "Derive node ID from a public key using Keccak-256."
-  (make-node-id-from-bytes (keccak-256 pubkey)))
+  (make-node-id-from-bytes (discv5.crypto:keccak-256 pubkey)))
 
 (defun node-id= (a b)
   "Test if two node IDs are equal."

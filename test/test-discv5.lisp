@@ -88,7 +88,7 @@
   ;; RLP tests
   (deftest rlp-encode-decode-integer
     (let ((val 12345))
-      (assert (= val (rlp-decode (rlp-encode val))))))
+      (assert (= val (rlp-decode-integer (rlp-decode (rlp-encode val)))))))
 
   (deftest rlp-encode-decode-bytes
     (let ((val #(1 2 3 4 5)))
@@ -96,7 +96,9 @@
 
   (deftest rlp-encode-decode-list
     (let ((val (list 1 2 3)))
-      (assert (equal val (rlp-decode (rlp-encode val))))))
+      (assert (equal val
+                     (mapcar #'rlp-decode-integer
+                             (rlp-decode (rlp-encode val)))))))
 
   ;; Session tests
   (deftest session-cache-operations

@@ -60,7 +60,7 @@
 (defun enr-encode (enr privkey)
   "Encode ENR to RLP with signature."
   (let* ((content (enr-encode-content enr))
-         (hash (keccak-256 content))
+         (hash (discv5.crypto:keccak-256 content))
          (sig (secp256k1-sign privkey hash)))
     (setf (enr-signature enr) sig)
     (let ((full (rlp-encode (list sig (enr-seq enr)
@@ -94,7 +94,7 @@
   "Verify ENR signature."
   (let* ((pubkey (enr-get enr +enr-key-secp256k1+))
          (content (enr-encode-content enr))
-         (hash (keccak-256 content)))
+         (hash (discv5.crypto:keccak-256 content)))
     (when pubkey
       (secp256k1-verify pubkey hash (enr-signature enr)))))
 
