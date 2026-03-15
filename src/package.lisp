@@ -1,7 +1,6 @@
 ;;;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
 ;;;; SPDX-License-Identifier: Apache-2.0
 
-;;;; -*- Mode: Lisp; Syntax: Common-Lisp -*-
 ;;;; package.lisp - Package definition for cl-discv5-protocol
 ;;;;
 ;;;; Ethereum Discovery v5 Protocol - Standalone Implementation
@@ -44,46 +43,29 @@ References:
 - EIP-778: Ethereum Node Records
 - https://github.com/ethereum/devp2p/blob/master/discv5/discv5.md")
 
-  ;; ============================================================================
-  ;; CONSTANTS AND CONFIGURATION
-  ;; ============================================================================
+  ;; Protocol constants
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Protocol constants
    #:+discv5-version+
    #:+protocol-id+
    #:+max-packet-size+
    #:+max-enr-size+
    #:+node-id-bits+
    #:+node-id-bytes+
-
-   ;; Kademlia parameters
    #:+k-bucket-size+
    #:+alpha+
    #:+num-buckets+
    #:+replacement-cache-size+
-
-   ;; Timing constants
    #:+request-timeout+
    #:+request-retries+
    #:+session-timeout+
    #:+bucket-refresh-interval+
    #:+liveness-check-interval+
    #:+topic-registration-ttl+
-
-   ;; Limits
    #:+max-nodes-response+
    #:+max-talk-request-size+
    #:+max-topic-name-size+
    #:+max-pending-requests+
    #:+max-sessions+
-
-   ;; Configuration
    #:*discv5-config*
    #:make-discv5-config
    #:discv5-config
@@ -94,115 +76,71 @@ References:
    #:config-request-timeout
    #:config-log-level)
 
-  ;; ============================================================================
-  ;; NODE IDENTITY
-  ;; ============================================================================
+  ;; Node Identity
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Node ID type
    #:node-id
    #:node-id-p
    #:make-node-id
-   #:make-node-id-from-bytes   ; For creating node IDs from byte arrays
+   #:make-node-id-from-bytes
    #:node-id-bytes
    #:node-id-hex
-
-   ;; Node ID generation
    #:generate-node-id
    #:node-id-from-public-key
    #:node-id-from-enr
    #:random-node-id
-
-   ;; Distance calculations
    #:node-distance
    #:log-distance
    #:common-prefix-length
    #:distance-compare
    #:closer-to-p
-
-   ;; Comparison and equality
    #:node-id=
    #:node-id<
    #:node-id-hash
-
-   ;; Serialization
    #:serialize-node-id
    #:deserialize-node-id
    #:node-id-to-string
    #:string-to-node-id
-
-   ;; Validation
    #:valid-node-id-p
    #:node-id-zero-p)
 
-  ;; ============================================================================
-  ;; ENR - ETHEREUM NODE RECORDS
-  ;; ============================================================================
+  ;; ENR - Ethereum Node Records
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; ENR structure
    #:enr
    #:enr-p
    #:make-enr
    #:copy-enr
-
-   ;; Required fields
    #:enr-signature
    #:enr-sequence
    #:enr-id
    #:enr-secp256k1
-
-   ;; Network fields
    #:enr-ip
    #:enr-ip6
    #:enr-tcp
    #:enr-tcp6
    #:enr-udp
    #:enr-udp6
-
-   ;; Key-value operations
    #:enr-get
    #:enr-set
    #:enr-delete
    #:enr-keys
    #:enr-pairs
-
-   ;; ENR creation and updates
    #:create-enr
    #:update-enr
    #:sign-enr
    #:increment-sequence
-
-   ;; Derivation
    #:enr-node-id
    #:enr-public-key
    #:enr-socket-address
-
-   ;; Serialization (RLP encoding)
    #:serialize-enr
    #:deserialize-enr
    #:enr-to-base64
    #:base64-to-enr
    #:enr-to-text
    #:parse-enr-text
-
-   ;; Validation
    #:verify-enr
    #:valid-enr-p
    #:enr-size
    #:enr-too-large-p
-
-   ;; Standard keys
    #:+enr-key-id+
    #:+enr-key-secp256k1+
    #:+enr-key-ip+
@@ -212,24 +150,15 @@ References:
    #:+enr-key-udp+
    #:+enr-key-udp6+)
 
-  ;; ============================================================================
-  ;; TYPES
-  ;; ============================================================================
+  ;; Types
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Node information
    #:discv5-node
    #:discv5-node-p
    #:make-discv5-node
-   #:discv5-node-id              ; Accessor for node's ID
-   #:discv5-node-enr             ; Accessor for node's ENR
-   #:discv5-node-address         ; Accessor for node's address
-   #:discv5-node-udp-port        ; Accessor for UDP port
+   #:discv5-node-id
+   #:discv5-node-enr
+   #:discv5-node-address
+   #:discv5-node-udp-port
    #:node-enr
    #:node-address
    #:node-last-seen
@@ -238,8 +167,6 @@ References:
    #:node-failed-requests
    #:node-latency
    #:node-added-at
-
-   ;; Socket address
    #:socket-address
    #:socket-address-p
    #:make-socket-address
@@ -249,8 +176,6 @@ References:
    #:address-to-string
    #:string-to-address
    #:address=
-
-   ;; Request tracking
    #:pending-request
    #:pending-request-p
    #:make-pending-request
@@ -261,8 +186,6 @@ References:
    #:request-retries
    #:request-callback
    #:request-timeout
-
-   ;; Lookup state
    #:lookup-state
    #:lookup-state-p
    #:make-lookup-state
@@ -273,8 +196,6 @@ References:
    #:lookup-started-at
    #:lookup-complete-p
    #:lookup-callback
-
-   ;; Topic registration
    #:topic-registration
    #:topic-registration-p
    #:make-topic-registration
@@ -282,8 +203,6 @@ References:
    #:registration-node
    #:registration-ticket
    #:registration-expires
-
-   ;; Ticket
    #:ticket
    #:ticket-p
    #:make-ticket
@@ -294,8 +213,6 @@ References:
    #:ticket-issued-at
    #:ticket-expires-at
    #:ticket-valid-p
-
-   ;; Error conditions
    #:discv5-error
    #:enr-error
    #:session-error
@@ -307,28 +224,17 @@ References:
    #:authentication-error
    #:routing-error)
 
-  ;; ============================================================================
-  ;; ROUTING TABLE
-  ;; ============================================================================
+  ;; Routing Table
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Routing table
    #:routing-table
    #:routing-table-p
    #:make-routing-table
-   #:make-routing-table-for-node  ; Convenience constructor
+   #:make-routing-table-for-node
    #:routing-table-local-id
    #:routing-table-local-enr
    #:routing-table-buckets
    #:routing-table-size
-   #:routing-table-node-count     ; Alias for routing-table-size
-
-   ;; K-bucket
+   #:routing-table-node-count
    #:k-bucket
    #:k-bucket-p
    #:make-k-bucket
@@ -338,63 +244,40 @@ References:
    #:bucket-size
    #:bucket-capacity
    #:bucket-last-refresh
-
-   ;; Core operations
    #:routing-table-add
    #:routing-table-remove
    #:routing-table-update
    #:routing-table-contains-p
    #:routing-table-get
    #:routing-table-get-bucket
-
-   ;; Lookups
    #:routing-table-closest
    #:routing-table-closest-except
    #:routing-table-random-nodes
    #:routing-table-all-nodes
    #:routing-table-nodes-at-distance
-
-   ;; Maintenance
    #:routing-table-refresh
    #:routing-table-refresh-bucket
    #:routing-table-prune
    #:routing-table-needs-refresh-p
    #:routing-table-stale-buckets
-
-   ;; Replacement cache
    #:bucket-add-replacement
    #:bucket-get-replacement
    #:bucket-promote-replacement
-
-   ;; Statistics
    #:routing-table-stats
    #:routing-table-health
    #:routing-table-coverage
    #:bucket-stats
-
-   ;; Persistence
    #:save-routing-table
    #:load-routing-table
    #:export-routing-table
    #:import-routing-table
-
-   ;; Events
    #:*on-node-added*
    #:*on-node-removed*
    #:*on-node-updated*
    #:*on-bucket-refresh*)
 
-  ;; ============================================================================
-  ;; PROTOCOL MESSAGES
-  ;; ============================================================================
+  ;; Protocol Messages
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Message types enum
    #:message-type
    #:+msg-ping+
    #:+msg-pong+
@@ -406,14 +289,11 @@ References:
    #:+msg-ticket+
    #:+msg-regconfirmation+
    #:+msg-topicquery+
-
-   ;; PING/PONG messages
    #:ping-message
    #:ping-message-p
    #:make-ping-message
    #:ping-request-id
    #:ping-enr-seq
-
    #:pong-message
    #:pong-message-p
    #:make-pong-message
@@ -421,36 +301,28 @@ References:
    #:pong-enr-seq
    #:pong-recipient-ip
    #:pong-recipient-port
-
-   ;; FINDNODE/NODES messages
    #:findnode-message
    #:findnode-message-p
    #:make-findnode-message
    #:findnode-request-id
    #:findnode-distances
-
    #:nodes-message
    #:nodes-message-p
    #:make-nodes-message
    #:nodes-request-id
    #:nodes-total
    #:nodes-enrs
-
-   ;; TALKREQ/TALKRESP messages
    #:talkreq-message
    #:talkreq-message-p
    #:make-talkreq-message
    #:talkreq-request-id
    #:talkreq-protocol
    #:talkreq-payload
-
    #:talkresp-message
    #:talkresp-message-p
    #:make-talkresp-message
    #:talkresp-request-id
    #:talkresp-payload
-
-   ;; Topic messages
    #:regtopic-message
    #:regtopic-message-p
    #:make-regtopic-message
@@ -458,66 +330,47 @@ References:
    #:regtopic-topic
    #:regtopic-enr
    #:regtopic-ticket
-
    #:ticket-message
    #:ticket-message-p
    #:make-ticket-message
    #:ticket-request-id
    #:ticket-wait-time
-
    #:regconfirmation-message
    #:regconfirmation-message-p
    #:make-regconfirmation-message
    #:regconfirmation-request-id
    #:regconfirmation-topic
-
    #:topicquery-message
    #:topicquery-message-p
    #:make-topicquery-message
    #:topicquery-request-id
    #:topicquery-topic
-
-   ;; Message serialization
    #:serialize-message
    #:deserialize-message
    #:message-type-code
    #:message-request-id)
 
-  ;; ============================================================================
-  ;; PACKET ENCODING
-  ;; ============================================================================
+  ;; Packet Encoding
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Packet types
    #:packet-type
    #:+packet-ordinary+
    #:+packet-whoareyou+
    #:+packet-handshake+
-
-   ;; Packet structures
    #:discv5-packet
    #:discv5-packet-p
    #:packet-src-id
    #:packet-dest-id
    #:packet-nonce
    #:packet-auth-tag
-
    #:ordinary-packet
    #:ordinary-packet-p
    #:make-ordinary-packet
    #:ordinary-packet-message
-
    #:whoareyou-packet
    #:whoareyou-packet-p
    #:make-whoareyou-packet
    #:whoareyou-id-nonce
    #:whoareyou-enr-seq
-
    #:handshake-packet
    #:handshake-packet-p
    #:make-handshake-packet
@@ -525,38 +378,23 @@ References:
    #:handshake-ephemeral-key
    #:handshake-enr
    #:handshake-message
-
-   ;; Packet encoding/decoding
    #:encode-packet
    #:decode-packet
    #:packet-header-size
    #:validate-packet
-
-   ;; Masking
    #:mask-src-id
    #:unmask-src-id
    #:compute-masking-key
-
-   ;; Nonce handling
    #:generate-nonce
    #:nonce-counter
    #:increment-nonce)
 
-  ;; ============================================================================
-  ;; SESSION MANAGEMENT
-  ;; ============================================================================
+  ;; Session Management
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Session structure
    #:session
    #:session-p
    #:make-session
-   #:discv5-session            ; Actual struct name in implementation
+   #:discv5-session
    #:discv5-session-p
    #:make-discv5-session
    #:discv5-session-node-id
@@ -568,52 +406,33 @@ References:
    #:session-last-used
    #:session-nonce-counter
    #:session-seen-nonces
-
-   ;; Session cache
    #:session-cache
    #:session-cache-p
    #:make-session-cache
-   #:make-session-cache-default  ; Convenience constructor
+   #:make-session-cache-default
    #:session-cache-get
    #:session-cache-put
    #:session-cache-remove
    #:session-cache-clear
    #:session-cache-size
    #:session-cache-prune
-
-   ;; Session operations
    #:create-session
    #:session-encrypt
    #:session-decrypt
    #:session-expired-p
    #:session-valid-p
-
-   ;; Key derivation
    #:derive-session-keys
    #:compute-shared-secret
    #:kdf-info
-
-   ;; Replay protection
    #:check-nonce-replay
    #:record-nonce
    #:prune-old-nonces
-
-   ;; Events
    #:*on-session-established*
    #:*on-session-expired*
    #:*on-session-error*)
 
-  ;; ============================================================================
-  ;; WHOAREYOU HANDSHAKE
-  ;; ============================================================================
+  ;; WHOAREYOU Handshake
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Handshake state
    #:handshake-state
    #:handshake-state-p
    #:make-handshake-state
@@ -622,8 +441,6 @@ References:
    #:handshake-enr-seq
    #:handshake-started-at
    #:handshake-request
-
-   ;; Handshake cache
    #:handshake-cache
    #:handshake-cache-p
    #:make-handshake-cache
@@ -631,69 +448,42 @@ References:
    #:handshake-cache-put
    #:handshake-cache-remove
    #:handshake-cache-prune
-
-   ;; Challenge generation
    #:generate-whoareyou
    #:create-id-nonce
    #:sign-id-nonce
    #:verify-id-nonce-signature
-
-   ;; Handshake processing
    #:handle-whoareyou
    #:create-handshake-response
    #:process-handshake
    #:complete-handshake
-
-   ;; Ephemeral keys
    #:generate-ephemeral-keypair
    #:compute-ephemeral-secret
-
-   ;; ID scheme operations
    #:id-sign
    #:id-verify
    #:id-nonce-signing-text
-
-   ;; Events
    #:*on-handshake-started*
    #:*on-handshake-complete*
    #:*on-handshake-failed*)
 
-  ;; ============================================================================
-  ;; FINDNODE HANDLING
-  ;; ============================================================================
+  ;; FINDNODE Handling
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Lookup operations
    #:find-node
    #:iterative-find-node
    #:parallel-find-node
    #:lookup-node
    #:lookup-random
-
-   ;; Request handling
    #:send-findnode
    #:handle-findnode
    #:send-nodes
    #:handle-nodes
-
-   ;; Distance-based queries
    #:query-distances
    #:collect-nodes-at-distances
    #:split-nodes-response
-
-   ;; Lookup state management
    #:create-lookup
    #:advance-lookup
    #:finalize-lookup
    #:cancel-lookup
    #:lookup-timed-out-p
-
-   ;; Closest nodes set
    #:closest-nodes-set
    #:closest-nodes-set-p
    #:make-closest-nodes-set
@@ -701,46 +491,29 @@ References:
    #:closest-set-pop
    #:closest-set-peek
    #:closest-set-full-p
-
-   ;; Events
    #:*on-lookup-started*
    #:*on-lookup-progress*
    #:*on-lookup-complete*
    #:*on-nodes-discovered*)
 
-  ;; ============================================================================
-  ;; TOPIC ADVERTISEMENT
-  ;; ============================================================================
+  ;; Topic Advertisement
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Topic operations
    #:register-topic
    #:unregister-topic
    #:query-topic
    #:advertise-topic
    #:stop-advertising
-
-   ;; Topic hash
    #:topic-hash
    #:topic-hash-p
    #:make-topic-hash
    #:topic-to-hash
-
-   ;; Topic table (actual implementation)
    #:topic-table
    #:topic-table-p
    #:make-topic-table
-   #:make-topic-table-default   ; Convenience constructor
+   #:make-topic-table-default
    #:topic-table-register
    #:topic-table-lookup
    #:topic-table-remove
-
-   ;; Topic index (ad table)
    #:topic-index
    #:topic-index-p
    #:make-topic-index
@@ -749,21 +522,15 @@ References:
    #:topic-index-query
    #:topic-index-prune
    #:topic-index-size
-
-   ;; Ticket management
    #:issue-ticket
    #:validate-ticket
    #:consume-ticket
    #:compute-wait-time
-
-   ;; Topic radius
    #:topic-radius
    #:topic-radius-p
    #:make-topic-radius
    #:radius-for-topic
    #:adjust-radius
-
-   ;; Request handling
    #:send-regtopic
    #:handle-regtopic
    #:send-ticket
@@ -772,8 +539,6 @@ References:
    #:handle-regconfirmation
    #:send-topicquery
    #:handle-topicquery
-
-   ;; Registration state
    #:registration-manager
    #:registration-manager-p
    #:make-registration-manager
@@ -781,24 +546,13 @@ References:
    #:registration-manager-complete
    #:registration-manager-cancel
    #:registration-manager-refresh
-
-   ;; Events
    #:*on-topic-registered*
    #:*on-topic-expired*
    #:*on-topic-query-result*
    #:*on-registration-denied*)
 
-  ;; ============================================================================
-  ;; MAIN DISCOVERY SERVICE
-  ;; ============================================================================
+  ;; Main Discovery Service
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Service structure
    #:discv5-service
    #:discv5-service-p
    #:make-discv5-service
@@ -808,48 +562,32 @@ References:
    #:service-session-cache
    #:service-socket
    #:service-running-p
-
-   ;; Lifecycle
    #:start-service
    #:stop-service
    #:restart-service
    #:service-status
-
-   ;; Bootstrap
    #:bootstrap
    #:add-boot-node
    #:remove-boot-node
    #:get-boot-nodes
-
-   ;; Node discovery
    #:discover-nodes
    #:find-closest-nodes
    #:refresh-all-buckets
    #:random-node-discovery
-
-   ;; Ping/Pong
    #:ping
    #:handle-ping
    #:handle-pong
-
-   ;; ENR operations
    #:get-local-enr
    #:update-local-enr
    #:request-enr
-
-   ;; Low-level operations
    #:send-packet
    #:receive-packet
    #:process-packet
    #:dispatch-message
-
-   ;; Connection management
    #:node-reachable-p
    #:get-node-address
    #:mark-node-responsive
    #:mark-node-unresponsive
-
-   ;; Events
    #:*on-service-started*
    #:*on-service-stopped*
    #:*on-message-received*
@@ -857,40 +595,23 @@ References:
    #:*on-node-discovered*
    #:*on-node-removed*)
 
-  ;; ============================================================================
-  ;; CONVENIENCE MACROS AND UTILITIES
-  ;; ============================================================================
+  ;; Convenience Macros and Utilities
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Convenience macros
    #:with-discv5-service
    #:with-session
    #:with-routing-table-lock
-
-   ;; Utility functions
    #:node-id-from-hex
    #:enr-from-text
    #:format-node-id
    #:format-enr
-
-   ;; RLP encoding/decoding
    #:rlp-encode
    #:rlp-decode
    #:rlp-decode-integer
-
-   ;; Debugging
    #:dump-routing-table
    #:dump-sessions
    #:dump-pending-requests
    #:trace-messages
    #:untrace-messages
-
-   ;; Testing helpers
    #:make-test-node
    #:make-test-enr
    #:simulate-network
@@ -901,13 +622,7 @@ References:
   (:use #:cl)
   (:documentation "Cryptographic primitives for Discovery v5 protocol.")
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check;; Keccak-256
+   ;; Keccak-256
    #:keccak-256
    #:keccak-256-update
    #:keccak-256-finalize
@@ -945,13 +660,7 @@ References:
   (:use #:cl #:discv5)
   (:documentation "Tests for Discovery v5 protocol implementation.")
   (:export
-   #:identity-list
-   #:flatten
-   #:map-keys
-   #:now-timestamp
-#:with-discv5-protocol-timing
-   #:discv5-protocol-batch-process
-   #:discv5-protocol-health-check#:run-tests))
+   #:run-tests))
 
 (in-package #:discv5)
 

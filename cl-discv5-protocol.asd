@@ -26,16 +26,12 @@ for secure, encrypted peer discovery in P2P networks. Features include:
 
   :serial t
   :components
-  ((:file "package")
-   (:module "src"
-                :components ((:file "package")
-                             (:file "conditions" :depends-on ("package"))
-                             (:file "types" :depends-on ("package"))
-                             (:file "cl-discv5-protocol" :depends-on ("package" "conditions" "types")))))  ; Main discovery service
-   (:module "test"
-    :components
-    ((:file "test-discv5"))))
-
+  ((:module "src"
+    :components ((:file "package")
+                 (:file "conditions" :depends-on ("package"))
+                 (:file "types" :depends-on ("package"))
+                 (:file "cl-discv5-protocol" :depends-on ("package" "conditions" "types"))
+                 (:file "cl-discv5-core" :depends-on ("package" "conditions" "types")))))
   :in-order-to ((asdf:test-op (test-op #:cl-discv5-protocol/test))))
 
 (asdf:defsystem #:cl-discv5-protocol/test
