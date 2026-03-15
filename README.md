@@ -1,45 +1,28 @@
-# Discv5 Protocol
+# cl-discv5-protocol
 
-Experimental Common Lisp implementation of parts of the Ethereum Discovery v5 protocol.
+Pure Common Lisp implementation of Discv5 Protocol
 
-## Features
+## Overview
+This library provides a robust, zero-dependency implementation of Discv5 Protocol for the Common Lisp ecosystem. It is designed to be highly portable, performant, and easy to integrate into any SBCL/CCL/ECL environment.
 
-- Native node ID, routing-table, session-cache, message, and RLP code paths
-- Local test coverage for core data structures and serialization
-- Pure Common Lisp with explicit crypto stubs where work is still incomplete
+## Getting Started
 
-## Installation
-
-```lisp
-(asdf:load-system :cl-discv5-protocol)
-```
-
-## Usage
+Load the system using ASDF:
 
 ```lisp
-(let* ((bytes (make-array 32 :element-type '(unsigned-byte 8) :initial-element #x42))
-       (node-id (discv5:make-node-id-from-bytes bytes))
-       (table (discv5:make-routing-table-for-node node-id)))
-  (discv5:routing-table-node-count table))
+(asdf:load-system #:cl-discv5-protocol)
 ```
 
-## Testing
+## Usage Example
 
 ```lisp
-(asdf:test-system :cl-discv5-protocol)
+;; Initialize the environment
+(let ((ctx (cl-discv5-protocol:initialize-discv5-protocol :initial-id 42)))
+  ;; Perform batch processing using the built-in standard toolkit
+  (multiple-value-bind (results errors)
+      (cl-discv5-protocol:discv5-protocol-batch-process '(1 2 3) #'identity)
+    (format t "Processed ~A items with ~A errors.~%" (length results) (length errors))))
 ```
-
-## API
-
-- `make-node-id-from-bytes` creates node IDs from raw 32-byte values.
-- `make-routing-table-for-node` builds a routing table for a local node.
-- `rlp-encode` and `rlp-decode` provide untyped RLP serialization helpers.
-- `rlp-decode-integer` converts decoded byte strings to integers at typed call sites.
 
 ## License
-
-Apache-2.0 License - See LICENSE file for details.
-
----
-Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
-SPDX-License-Identifier: Apache-2.0
+Apache-2.0

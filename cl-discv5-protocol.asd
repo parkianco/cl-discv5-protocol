@@ -10,8 +10,8 @@
 (asdf:defsystem #:cl-discv5-protocol
   :name "cl-discv5-protocol"
   :version "0.1.0"
-  :author "Parkian Company LLC"
-  :license "MIT"
+  :author "Park Ian Co"
+  :license "Apache-2.0"
   :description "Ethereum Discovery v5 UDP Protocol - Standalone Implementation"
   :long-description "Pure Common Lisp implementation of the Ethereum Discovery v5 protocol
 for secure, encrypted peer discovery in P2P networks. Features include:
@@ -28,22 +28,10 @@ for secure, encrypted peer discovery in P2P networks. Features include:
   :components
   ((:file "package")
    (:module "src"
-    :serial t
-    :components
-    ((:file "util")         ; Utilities, byte operations, hex encoding
-     (:file "crypto")       ; Keccak-256, secp256k1, AES-GCM, HKDF
-     (:file "rlp")          ; RLP encoding/decoding
-     (:file "node-id")      ; Node ID and distance calculations
-     (:file "enr")          ; Ethereum Node Records
-     (:file "types")        ; Protocol types and conditions
-     (:file "packet")       ; Packet encoding/decoding
-     (:file "session")      ; Session management and encryption
-     (:file "handshake")    ; WHOAREYOU handshake
-     (:file "routing")      ; Kademlia routing table
-     (:file "messages")     ; Protocol messages
-     (:file "findnode")     ; FINDNODE/NODES handling
-     (:file "topics")       ; Topic advertisement
-     (:file "discovery")))  ; Main discovery service
+                :components ((:file "package")
+                             (:file "conditions" :depends-on ("package"))
+                             (:file "types" :depends-on ("package"))
+                             (:file "cl-discv5-protocol" :depends-on ("package" "conditions" "types")))))  ; Main discovery service
    (:module "test"
     :components
     ((:file "test-discv5"))))
