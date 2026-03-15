@@ -1,5 +1,5 @@
 ;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
-;; SPDX-License-Identifier: BSD-3-Clause
+;; SPDX-License-Identifier: Apache-2.0
 
 ;;;; test-discv5.lisp - Tests for Discovery v5 protocol
 ;;;; Part of cl-discv5-protocol

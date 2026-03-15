@@ -1,5 +1,5 @@
 ;;;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
-;;;; SPDX-License-Identifier: BSD-3-Clause
+;;;; SPDX-License-Identifier: Apache-2.0
 
 ;;;; -*- Mode: Lisp; Syntax: Common-Lisp -*-
 ;;;; rlp.lisp - Recursive Length Prefix encoding for Ethereum
