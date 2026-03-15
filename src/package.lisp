@@ -48,7 +48,11 @@ References:
   ;; CONSTANTS AND CONFIGURATION
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Protocol constants
    #:+discv5-version+
@@ -94,7 +98,11 @@ References:
   ;; NODE IDENTITY
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Node ID type
    #:node-id
@@ -136,7 +144,11 @@ References:
   ;; ENR - ETHEREUM NODE RECORDS
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; ENR structure
    #:enr
@@ -204,7 +216,11 @@ References:
   ;; TYPES
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Node information
    #:discv5-node
@@ -295,7 +311,11 @@ References:
   ;; ROUTING TABLE
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Routing table
    #:routing-table
@@ -368,7 +388,11 @@ References:
   ;; PROTOCOL MESSAGES
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Message types enum
    #:message-type
@@ -463,7 +487,11 @@ References:
   ;; PACKET ENCODING
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Packet types
    #:packet-type
@@ -518,7 +546,11 @@ References:
   ;; SESSION MANAGEMENT
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Session structure
    #:session
@@ -575,7 +607,11 @@ References:
   ;; WHOAREYOU HANDSHAKE
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Handshake state
    #:handshake-state
@@ -626,7 +662,11 @@ References:
   ;; FINDNODE HANDLING
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Lookup operations
    #:find-node
@@ -672,7 +712,11 @@ References:
   ;; TOPIC ADVERTISEMENT
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Topic operations
    #:register-topic
@@ -748,7 +792,11 @@ References:
   ;; MAIN DISCOVERY SERVICE
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Service structure
    #:discv5-service
@@ -813,7 +861,11 @@ References:
   ;; CONVENIENCE MACROS AND UTILITIES
   ;; ============================================================================
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Convenience macros
    #:with-discv5-service
@@ -849,7 +901,11 @@ References:
   (:use #:cl)
   (:documentation "Cryptographic primitives for Discovery v5 protocol.")
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check;; Keccak-256
    #:keccak-256
@@ -889,7 +945,11 @@ References:
   (:use #:cl #:discv5)
   (:documentation "Tests for Discovery v5 protocol implementation.")
   (:export
-   #:with-discv5-protocol-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-discv5-protocol-timing
    #:discv5-protocol-batch-process
    #:discv5-protocol-health-check#:run-tests))
 
